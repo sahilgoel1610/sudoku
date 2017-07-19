@@ -10,16 +10,11 @@ type MatrixPointer struct {
 }
 
 func main() {
-	values := [][]int{}
-	row1 := []int{1,2,3,4}
-	row2 := []int{0,3,4,1}
-	row3 := []int{3,4,1,2}
-	row4 := []int{4,1,0,3}
-
-	values = append(values, row1)
-	values = append(values, row2)
-	values = append(values, row3)
-	values = append(values, row4)
+	values := [4][4]int{
+		{1,2,3,0},
+		{0,3,4,1},
+		{3,4,1,2},
+		{4,1,0,3}}
 
 	matrixPointer := findNextEmpty(values)
 	finalResult := canFillThisPlace(copyArray(values), matrixPointer.X, matrixPointer.Y)
@@ -30,7 +25,7 @@ func main() {
 }
 
 
-func canFillThisPlace(matrix [][]int, i int, j int) bool {
+func canFillThisPlace(matrix [4][4]int, i int, j int) bool {
 	resultChan := make(chan bool, 4)
 	for k := 1; k < 5; k++ {
 		a := copyArray(matrix)
@@ -42,7 +37,7 @@ func canFillThisPlace(matrix [][]int, i int, j int) bool {
 }
 
 
-func tryWithNumber(a [][]int, i int, j int , k int, resultChan chan bool) {
+func tryWithNumber(a [4][4]int, i int, j int , k int, resultChan chan bool) {
 	matrix := copyArray(a)
 	matrix[i][j] = k
 	if conditionsAtPositionValid(matrix, i, j) {
@@ -60,7 +55,7 @@ func tryWithNumber(a [][]int, i int, j int , k int, resultChan chan bool) {
 
 
 
-func conditionsAtPositionValid(matrix [][]int, i int, j int) bool {
+func conditionsAtPositionValid(matrix [4][4]int, i int, j int) bool {
 	for a := 0; a < 4; a++ {
 		if a != i && matrix[a][j] == matrix[i][j] {
 			return false;
@@ -77,7 +72,7 @@ func conditionsAtPositionValid(matrix [][]int, i int, j int) bool {
 }
 
 // Tested
-func findNextEmpty(matrix [][]int) MatrixPointer {
+func findNextEmpty(matrix [4][4]int) MatrixPointer {
 	for i := 0; i < 4; i++ {
 		for j:= 0; j < 4; j++ {
 			if matrix[i][j] == 0 {
@@ -90,7 +85,7 @@ func findNextEmpty(matrix [][]int) MatrixPointer {
 }
 
 
-func commitMatrix(matrix [][]int) {
+func commitMatrix(matrix [4][4]int) {
 	for i := 0; i < 4; i++ {
 		fmt.Print("|")
 		for j:= 0; j < 4; j++ {
@@ -101,18 +96,10 @@ func commitMatrix(matrix [][]int) {
 }
 
 
-func copyArray(matrix [][]int) [][]int {
+func copyArray(matrix [4][4]int) [4][4]int {
 
-	copiedArray := [][]int{}
-	row1 := []int{0,0,0,0}
-	row2 := []int{0,0,0,0}
-	row3 := []int{0,0,0,0}
-	row4 := []int{0,0,0,3}
-
-	copiedArray = append(copiedArray, row1)
-	copiedArray = append(copiedArray, row2)
-	copiedArray = append(copiedArray, row3)
-	copiedArray = append(copiedArray, row4)
+	copiedArray := [4][4]int{}
+	
 	for i := 0; i < 4; i++ {
 		for j:= 0; j < 4; j++ {
 			copiedArray[i][j] = matrix[i][j]
